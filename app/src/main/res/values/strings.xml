@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Taskr</string>
+    <string name="Tasks">Tasks</string>
+    <string name="Habits">Habits</string>
+</resources>
