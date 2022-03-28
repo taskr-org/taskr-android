@@ -76,9 +76,12 @@ dependencies {
 
     // Compose Dependencies
     implementation 'androidx.activity:activity-compose:1.5.0-alpha03'
-    implementation "androidx.compose.ui:ui:1.2.0-alpha05"
+    implementation "androidx.compose.ui:ui:1.2.0-alpha06"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0"
+    implementation "androidx.compose.foundation:foundation:1.1.1"
+
     // m3 dependency in case i change my mind
     // implementation 'androidx.compose.material3:material3:1.0.0-alpha04'
 
@@ -87,8 +90,10 @@ dependencies {
     implementation 'androidx.compose.material:material:1.1.1'
 
     // Accompanist Dependencies
-    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.14.0'
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.23.0'
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.24.5-alpha"
     implementation 'com.google.accompanist:accompanist-insets:0.24.3-alpha'
+    implementation "com.google.accompanist:accompanist-pager:0.24.5-alpha"
     implementation 'com.google.accompanist:accompanist-coil:0.15.0'
 
     // Android Instrumental Tests

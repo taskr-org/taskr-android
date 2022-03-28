@@ -1,13 +1,12 @@
 package live.taskr.taskr.ui.components
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
+import live.taskr.taskr.ui.theme.TaskrTheme
 
 @Composable
 fun TaskrOutlinedTextField(
@@ -21,7 +20,6 @@ fun TaskrOutlinedTextField(
     singleLine: Boolean = true,
     shape: Shape = MaterialTheme.shapes.small
     ) {
-//    var value by remember{ mutableStateOf("") }
     OutlinedTextField(
         value = value,
         onValueChange = { onValueChange(it) },
@@ -34,11 +32,22 @@ fun TaskrOutlinedTextField(
         shape = shape,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondaryVariant,
-            unfocusedBorderColor = ,
-            cursorColor = ,
-            errorBorderColor = ,
-            errorCursorColor = ,
-            trailingIconColor = ,
+            unfocusedBorderColor = MaterialTheme.colors.secondaryVariant.copy(0.5f),
+            cursorColor = MaterialTheme.colors.secondaryVariant,
+            errorBorderColor = MaterialTheme.colors.error,
+            errorCursorColor = MaterialTheme.colors.error,
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewTaskrOutlinedTextField() {
+    TaskrTheme {
+        TaskrOutlinedTextField(
+            value = TextFieldValue("Email"),
+            onValueChange = {},
+            label = {Text("hey")}
+        )
+    }
 }

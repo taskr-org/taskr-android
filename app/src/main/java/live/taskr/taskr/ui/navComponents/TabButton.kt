@@ -1,15 +1,11 @@
 package live.taskr.taskr.ui.navComponents
 
-import android.accounts.AuthenticatorDescription
-import android.content.Context
-import android.provider.Settings.System.getString
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-//import androidx.compose.materia
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,19 +13,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import live.taskr.taskr.R
 import live.taskr.taskr.ui.theme.TaskrTheme
-import java.lang.Integer.toString
 
 @Composable
-fun NavButton(
+fun TabButton(
     title: String,
     contentDescription: String,
     icon: Painter,
-    action: () -> Unit,
+    onClick: () -> Unit,
     isSelected: Boolean
 ) {
     Row(
@@ -47,7 +41,7 @@ fun NavButton(
             modifier = Modifier.padding(8.dp).wrapContentWidth(),
         ) {
             IconButton(
-                onClick = action,
+                onClick = onClick,
                 modifier = Modifier
                     .wrapContentWidth()
                     .padding(start = 16.dp, end = 16.dp)) {
@@ -72,10 +66,10 @@ fun NavButton(
 @Composable
 fun PreviewNavButton() {
     TaskrTheme {
-        NavButton(
+        TabButton(
             title = "Tasks",
             icon = painterResource(R.drawable.ic_tasks),
-            action = {},
+            onClick = {},
             isSelected = true,
             contentDescription = ""
         )
