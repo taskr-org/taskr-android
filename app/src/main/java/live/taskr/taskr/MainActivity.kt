@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import live.taskr.taskr.screens.LoginScreen
+import live.taskr.taskr.screens.RegisterScreen
 import live.taskr.taskr.ui.navComponents.TaskTopAppBar
 import live.taskr.taskr.ui.theme.TaskrTheme
 import live.taskr.taskr.ui.theme.blueGrey900
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    LoginScreen()
+                    RegisterScreen()
 
 //                    Greeting()
                 }

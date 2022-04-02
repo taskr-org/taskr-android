@@ -2,5 +2,6 @@
     <string name="app_name">Taskr</string>
     <string name="Tasks">Tasks</string>
     <string name="Habits">Habits</string>
+    <string name="quote">Let\'s organize your day</string>
     <string name="TabBtnContentDescription">Tabs Button</string>
 </resources>
