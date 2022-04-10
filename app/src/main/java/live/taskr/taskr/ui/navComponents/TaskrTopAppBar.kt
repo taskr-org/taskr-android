@@ -15,7 +15,7 @@ import live.taskr.taskr.R
 import live.taskr.taskr.utils.models.Destinations
 
 @Composable
-fun TaskTopAppBar(
+fun TaskrTopAppBar(
     userName: String,
     quote: String,
     modifier: Modifier = Modifier,

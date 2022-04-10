@@ -20,7 +20,9 @@ import live.taskr.taskr.ui.components.TaskrOutlinedTextField
 import live.taskr.taskr.ui.theme.TaskrTheme
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navigateToRegister: () -> Unit
+) {
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
     Surface() {
@@ -37,7 +39,8 @@ fun LoginScreen() {
                 username = username,
                 onUserNameChange = { username = it },
                 password = password,
-                onPasswordChange = { password = it }
+                onPasswordChange = { password = it },
+                navigateToRegister = navigateToRegister
             )
         }
 
@@ -49,7 +52,8 @@ fun LoginFields(
     username: TextFieldValue,
     onUserNameChange: (TextFieldValue) -> Unit,
     password: TextFieldValue,
-    onPasswordChange: (TextFieldValue) -> Unit
+    onPasswordChange: (TextFieldValue) -> Unit,
+    navigateToRegister: () -> Unit
 ) {
     Column(
         Modifier
@@ -102,7 +106,7 @@ fun LoginFields(
                 .padding(bottom = 18.dp)
             )
             OutlinedButton(
-                onClick = { /*TODO*/ },
+                onClick = navigateToRegister,
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = MaterialTheme.colors.onBackground
                 ),
@@ -163,6 +167,8 @@ fun Oauth(modifier: Modifier = Modifier) {
 @Composable
 fun PreviewLoginScreen() {
     TaskrTheme {
-        LoginScreen()
+        LoginScreen(
+            navigateToRegister = {}
+        )
     }
 }
