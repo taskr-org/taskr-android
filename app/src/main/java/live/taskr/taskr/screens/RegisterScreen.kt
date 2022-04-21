@@ -2,26 +2,42 @@ package live.taskr.taskr.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 import live.taskr.taskr.R
+import live.taskr.taskr.TaskrAppState
+import live.taskr.taskr.rememberTaskrAppState
 import live.taskr.taskr.ui.components.TaskrOutlinedTextField
 import live.taskr.taskr.ui.theme.TaskrTheme
+import live.taskr.taskr.utils.models.LoginViewModel
+import live.taskr.taskr.utils.models.RegisterViewModel
+import live.taskr.taskr.utils.networking.Result
 
 @Composable
-fun RegisterScreen() {
-    var fullName by remember { mutableStateOf(TextFieldValue("")) }
-    var email by remember { mutableStateOf(TextFieldValue("")) }
-    var userName by remember { mutableStateOf(TextFieldValue("")) }
-    var password by remember { mutableStateOf(TextFieldValue("")) }
+fun RegisterScreen(
+    navigateToLogin: () -> Unit,
+    viewModel: RegisterViewModel = viewModel()
+) {
+    val viewState by viewModel.state.collectAsState()
+
+    var fullName = viewState.fullName
+    var username = viewState.userName
+    var password = viewState.password
+    var email = viewState.email
+
+    IsRegisterd()
     Column() {
         Text(
             text = stringResource(id = R.string.app_name),
@@ -36,11 +52,39 @@ fun RegisterScreen() {
             onFullNameChange = { fullName = it },
             email = email,
             onEmailChange = { email = it },
-            userName = userName,
-            onUserNameChange = { userName = it},
+            userName = username,
+            onUserNameChange = { username = it },
             password = password,
-            onPasswordChange = { password = it }
+            onPasswordChange = { password = it },
+            navigateToLogin = navigateToLogin,
+            registerUser = viewModel::createUser
         )
+    }
+}
+
+@Composable
+fun IsRegisterd(
+    viewModel: RegisterViewModel = viewModel(),
+    appState: TaskrAppState = rememberTaskrAppState()
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val viewState by viewModel.state.collectAsState()
+    LaunchedEffect(viewState) {
+        coroutineScope.launch {
+            viewModel.registerState.collect { result ->
+                when (result) {
+                    is Result.SUCCESS -> {
+                        appState.navigateToHome()
+                    }
+                    is Result.ERROR -> {
+                        // TODO
+                    }
+                    is Result.LOADING -> {
+                        // TODO
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -53,7 +97,9 @@ fun RegisterFields(
     userName: TextFieldValue,
     onUserNameChange: (TextFieldValue) -> Unit,
     password: TextFieldValue,
-    onPasswordChange: (TextFieldValue) -> Unit
+    onPasswordChange: (TextFieldValue) -> Unit,
+    navigateToLogin: () -> Unit,
+    registerUser: () -> Unit
 ) {
     Column(
         Modifier
@@ -82,7 +128,7 @@ fun RegisterFields(
             label = { Text("Password") }
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = registerUser,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.onBackground,
                 contentColor = MaterialTheme.colors.background
@@ -90,7 +136,7 @@ fun RegisterFields(
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
         ) {
             Text(
-                text = "Sign in",
+                text = "create account",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 8.dp)
@@ -110,12 +156,13 @@ fun RegisterFields(
                 .padding(18.dp)
                 .wrapContentWidth(CenterHorizontally)
         )
-        Oauth(modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 18.dp)
+        Oauth(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 18.dp)
         )
         OutlinedButton(
-            onClick = { /*TODO*/ },
+            onClick = { navigateToLogin },
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colors.onBackground
             ),
@@ -132,6 +179,49 @@ fun RegisterFields(
     }
 }
 
+//@Composable
+//fun Oauth(modifier: Modifier = Modifier) {
+//    Row(
+//        modifier = modifier,
+//        horizontalArrangement = Arrangement.Center,
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        OutlinedButton(
+//            onClick = { /*TODO*/ },
+//            modifier = Modifier
+//                .padding(end = 10.dp)
+//                .size(50.dp),
+//            shape = CircleShape,
+//            border = BorderStroke(1.dp, MaterialTheme.colors.onBackground),
+//            contentPadding = PaddingValues(0.dp),
+//            colors = ButtonDefaults.outlinedButtonColors(
+//                contentColor = MaterialTheme.colors.onBackground
+//            )
+//        ) {
+//            Icon(
+//                painter = painterResource(id = R.drawable.ic_google),
+//                contentDescription = "Sign in with google"
+//            )
+//        }
+//
+//        OutlinedButton(
+//            onClick = { /*TODO*/ },
+//            modifier = Modifier.size(50.dp),
+//            shape = CircleShape,
+//            border = BorderStroke(1.dp, MaterialTheme.colors.onBackground),
+//            contentPadding = PaddingValues(0.dp),
+//            colors = ButtonDefaults.outlinedButtonColors(
+//                contentColor = MaterialTheme.colors.onBackground
+//            )
+//        ) {
+//            Icon(
+//                painter = painterResource(id = R.drawable.ic_twitter),
+//                contentDescription = "Sign in with google"
+//            )
+//        }
+//    }
+//}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewRegisterFields() {
@@ -144,7 +234,10 @@ fun PreviewRegisterFields() {
             userName = TextFieldValue("Username"),
             onUserNameChange = {},
             password = TextFieldValue("Password"),
-            onPasswordChange = {})
+            onPasswordChange = {},
+            navigateToLogin = {},
+            registerUser = {}
+        )
     }
 }
 
@@ -152,6 +245,8 @@ fun PreviewRegisterFields() {
 @Composable
 fun PreviewRegisterScreen() {
     TaskrTheme {
-        RegisterScreen()
+        RegisterScreen(
+            navigateToLogin = {}
+        )
     }
 }

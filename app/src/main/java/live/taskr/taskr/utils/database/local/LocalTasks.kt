@@ -1,12 +1,13 @@
-package live.taskr.taskr.utils.data.local
+package live.taskr.taskr.utils.database.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 @Entity
 data class LocalTasks(
-    var title: String,
+    var title: String? = null,
     var description: String? = null,
     var type: String? = null,
     var reminder: Boolean = false,
@@ -18,5 +19,5 @@ data class LocalTasks(
     var locallyDeleted: Boolean = false,
 
     @PrimaryKey(autoGenerate = true)
-    var taskId: String = UUID.randomUUID().toString()
-)
+    var taskId: Long
+): Serializable

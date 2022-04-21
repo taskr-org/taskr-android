@@ -1,7 +1,10 @@
 package live.taskr.taskr.screens
 
+import android.util.Log
+import android.util.Log.VERBOSE
+import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -15,21 +18,46 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import live.taskr.taskr.R
+import live.taskr.taskr.TaskrAppState
+import live.taskr.taskr.rememberTaskrAppState
 import live.taskr.taskr.ui.components.TaskrOutlinedTextField
 import live.taskr.taskr.ui.theme.TaskrTheme
+import live.taskr.taskr.utils.models.LoginViewModel
+import live.taskr.taskr.utils.models.UserViewModel
+import live.taskr.taskr.utils.networking.Result
+
+
+//@AndroidEntryPoint
+//class MainLoginScreen(): ComponentActivity() {
+//
+//}
 
 @Composable
 fun LoginScreen(
-    navigateToRegister: () -> Unit
+    navigateToRegister: () -> Unit,
+    viewModel: LoginViewModel = viewModel()
 ) {
-    var username by remember { mutableStateOf(TextFieldValue("")) }
-    var password by remember { mutableStateOf(TextFieldValue("")) }
-    Surface() {
-        Column() {
+
+//    val viewModel: LoginViewModel by viewModel()
+    val viewState by viewModel.state.collectAsState()
+
+    var username = viewState.userName
+    var password = viewState.password
+
+    IsLoggedIn()
+    Surface {
+        Column {
             Text(
                 text = stringResource(id = R.string.app_name),
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
             )
             Text(
                 text = stringResource(id = R.string.quote),
@@ -40,10 +68,37 @@ fun LoginScreen(
                 onUserNameChange = { username = it },
                 password = password,
                 onPasswordChange = { password = it },
-                navigateToRegister = navigateToRegister
+                navigateToRegister = navigateToRegister,
+                loginUser = viewModel::loginUser
             )
         }
 
+    }
+}
+
+@Composable
+fun IsLoggedIn(
+    viewModel: LoginViewModel = viewModel(),
+    appState: TaskrAppState = rememberTaskrAppState()
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val viewState by viewModel.state.collectAsState()
+    LaunchedEffect(viewState) {
+        coroutineScope.launch {
+            viewModel.loginState.collect { result ->
+                when (result) {
+                    is Result.SUCCESS -> {
+                        appState.navigateToHome()
+                    }
+                    is Result.ERROR -> {
+                        // TODO
+                    }
+                    is Result.LOADING -> {
+                        // TODO
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -53,7 +108,8 @@ fun LoginFields(
     onUserNameChange: (TextFieldValue) -> Unit,
     password: TextFieldValue,
     onPasswordChange: (TextFieldValue) -> Unit,
-    navigateToRegister: () -> Unit
+    navigateToRegister: () -> Unit,
+    loginUser: () -> Unit
 ) {
     Column(
         Modifier
@@ -73,7 +129,7 @@ fun LoginFields(
                 label = { Text("Password") },
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = loginUser,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onBackground,
                     contentColor = MaterialTheme.colors.background
@@ -101,9 +157,10 @@ fun LoginFields(
                     .padding(18.dp)
                     .wrapContentWidth(CenterHorizontally)
             )
-            Oauth(modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 18.dp)
+            Oauth(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 18.dp)
             )
             OutlinedButton(
                 onClick = navigateToRegister,
@@ -126,13 +183,16 @@ fun LoginFields(
 
 @Composable
 fun Oauth(modifier: Modifier = Modifier) {
-    Row(modifier = modifier,
+    Row(
+        modifier = modifier,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         OutlinedButton(
             onClick = { /*TODO*/ },
-            modifier = Modifier.padding(end = 10.dp).size(50.dp),
+            modifier = Modifier
+                .padding(end = 10.dp)
+                .size(50.dp),
             shape = CircleShape,
             border = BorderStroke(1.dp, MaterialTheme.colors.onBackground),
             contentPadding = PaddingValues(0.dp),
@@ -142,7 +202,8 @@ fun Oauth(modifier: Modifier = Modifier) {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_google),
-                contentDescription = "Sign in with google")
+                contentDescription = "Sign in with google"
+            )
         }
 
         OutlinedButton(
@@ -157,18 +218,18 @@ fun Oauth(modifier: Modifier = Modifier) {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_twitter),
-                contentDescription = "Sign in with google")
+                contentDescription = "Sign in with google"
+            )
         }
     }
-    
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewLoginScreen() {
-    TaskrTheme {
-        LoginScreen(
-            navigateToRegister = {}
-        )
-    }
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun PreviewLoginScreen() {
+//    TaskrTheme {
+//        MainLoginScreen().LoginScreen(
+//            navigateToRegister = {}
+//        )
+//    }
+//}

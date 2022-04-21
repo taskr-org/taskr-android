@@ -16,8 +16,10 @@ import live.taskr.taskr.utils.MainDestinations
  */
 @Composable
 fun TaskrApp(
-    appState: TaskrAppState = rememberTaskrAppState()
+    appState: TaskrAppState = rememberTaskrAppState(),
+
 ) {
+//    val loginScreen = MainLoginScreen()
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -35,7 +37,11 @@ fun TaskrApp(
                 }
             )
         }
-        composable(MainDestinations.Register.route) { RegisterScreen() }
+        composable(MainDestinations.Register.route) {
+            RegisterScreen(navigateToLogin = {
+                appState.navigateToLogin()
+            })
+        }
         composable(MainDestinations.Home.route) { Home() }
 
     }

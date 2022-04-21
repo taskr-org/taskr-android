@@ -1,12 +1,12 @@
-package live.taskr.taskr.utils.data.local.dao
+package live.taskr.taskr.utils.database.local.dao
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
-import live.taskr.taskr.utils.data.local.LocalHabits
-import live.taskr.taskr.utils.data.local.LocalTasks
+import live.taskr.taskr.utils.database.local.LocalHabits
 
+@Dao
 interface HabitsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHabit(habits: LocalHabits)

@@ -8,6 +8,6 @@ sealed class Result<T>(
     val errorMessage:String? = null
 ) {
     class SUCCESS<T>(data: T?, errorMessage: String? = null):Result<T>(data, errorMessage)
-    class ERROR<T>(errorMessage: String?, data: T?):Result<T>(data, errorMessage)
+    class ERROR<T>(errorMessage: String?, data: T? = null):Result<T>(data, errorMessage)
     class LOADING<T>:Result<T>()
 }

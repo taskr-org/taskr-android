@@ -8,22 +8,26 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import live.taskr.taskr.utils.MainDestinations
+import live.taskr.taskr.utils.models.HomeViewModel
+import live.taskr.taskr.utils.models.LoginViewModel
 
 @Composable
 fun rememberTaskrAppState(
     navController: NavHostController = rememberNavController(),
-    context: Context = LocalContext.current
+    context: Context = LocalContext.current,
 ) = remember(navController, context){
     TaskrAppState(navController, context)
 }
 
 class TaskrAppState(
     val navController: NavHostController,
-    private val context: Context
+    private val context: Context,
+
 ) {
     var isOnline by mutableStateOf(checkIfOnline())
         private set
@@ -33,12 +37,17 @@ class TaskrAppState(
     }
 
     fun navigateToRegister() {
-        navController.navigate(MainDestinations.Home.route)
+        navController.navigate(MainDestinations.Register.route)
+    }
+
+    fun navigateToLogin() {
+        navController.navigate(MainDestinations.Login.route)
     }
 
     fun navigateToHome() {
-
+        navController.navigate(MainDestinations.Home.route)
     }
+
     private fun checkIfOnline(): Boolean {
         val connectivityManager = getSystemService(context, ConnectivityManager::class.java)
 
