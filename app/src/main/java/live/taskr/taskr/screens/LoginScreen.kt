@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -32,23 +33,15 @@ import live.taskr.taskr.utils.models.LoginViewModel
 import live.taskr.taskr.utils.models.UserViewModel
 import live.taskr.taskr.utils.networking.Result
 
-
-//@AndroidEntryPoint
-//class MainLoginScreen(): ComponentActivity() {
-//
-//}
-
 @Composable
 fun LoginScreen(
     navigateToRegister: () -> Unit,
-    viewModel: LoginViewModel = viewModel()
 ) {
-
-//    val viewModel: LoginViewModel by viewModel()
+    val viewModel = hiltViewModel<LoginViewModel>()
     val viewState by viewModel.state.collectAsState()
 
-    var username = viewState.userName
-    var password = viewState.password
+    var username by remember { mutableStateOf(viewState.userName) }
+    var password by remember { mutableStateOf(viewState.password) }
 
     IsLoggedIn()
     Surface {
@@ -78,9 +71,9 @@ fun LoginScreen(
 
 @Composable
 fun IsLoggedIn(
-    viewModel: LoginViewModel = viewModel(),
     appState: TaskrAppState = rememberTaskrAppState()
 ) {
+    val viewModel = hiltViewModel<LoginViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val viewState by viewModel.state.collectAsState()
     LaunchedEffect(viewState) {
@@ -88,13 +81,16 @@ fun IsLoggedIn(
             viewModel.loginState.collect { result ->
                 when (result) {
                     is Result.SUCCESS -> {
+                        Log.e("Login:","success")
                         appState.navigateToHome()
                     }
                     is Result.ERROR -> {
                         // TODO
+                        Log.e("Login:","error")
                     }
                     is Result.LOADING -> {
                         // TODO
+                        Log.e("Login:","loading")
                     }
                 }
             }

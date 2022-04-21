@@ -1,5 +1,6 @@
 package live.taskr.taskr.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import live.taskr.taskr.R
@@ -28,14 +30,14 @@ import live.taskr.taskr.utils.networking.Result
 @Composable
 fun RegisterScreen(
     navigateToLogin: () -> Unit,
-    viewModel: RegisterViewModel = viewModel()
 ) {
+    val viewModel = hiltViewModel<RegisterViewModel>()
     val viewState by viewModel.state.collectAsState()
 
-    var fullName = viewState.fullName
-    var username = viewState.userName
-    var password = viewState.password
-    var email = viewState.email
+    var fullName by remember { mutableStateOf(viewState.fullName) }
+    var username by remember { mutableStateOf(viewState.userName) }
+    var password by remember { mutableStateOf(viewState.password) }
+    var email by remember { mutableStateOf(viewState.email) }
 
     IsRegisterd()
     Column() {
@@ -64,9 +66,10 @@ fun RegisterScreen(
 
 @Composable
 fun IsRegisterd(
-    viewModel: RegisterViewModel = viewModel(),
     appState: TaskrAppState = rememberTaskrAppState()
 ) {
+
+    val viewModel = hiltViewModel<RegisterViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val viewState by viewModel.state.collectAsState()
     LaunchedEffect(viewState) {
@@ -74,13 +77,18 @@ fun IsRegisterd(
             viewModel.registerState.collect { result ->
                 when (result) {
                     is Result.SUCCESS -> {
+                        Log.e("Register:","success")
                         appState.navigateToHome()
                     }
                     is Result.ERROR -> {
+
+                        Log.e("Register:","ERROR")
                         // TODO
                     }
                     is Result.LOADING -> {
                         // TODO
+
+                        Log.e("Register:","loading")
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package live.taskr.taskr.utils.models
 
+import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,8 +16,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val taskrRepo: TaskrRepo
 ) : ViewModel() {
-    private val userName = MutableStateFlow(TextFieldValue(""))
-    private val password = MutableStateFlow(TextFieldValue(""))
+    private val userName = MutableStateFlow(TextFieldValue("test"))
+    private val password = MutableStateFlow(TextFieldValue("test"))
 
     private val _loginState = MutableSharedFlow<Result<String>>()
     val loginState: SharedFlow<Result<String>> = _loginState
@@ -49,7 +50,7 @@ class LoginViewModel @Inject constructor(
         Password: TextFieldValue = password.value
     ) = viewModelScope.launch {
         _loginState.emit(Result.LOADING())
-
+        Log.e("Login:","who summoned me?")
         if (UserName.text.isEmpty() || Password.text.isEmpty()) {
             _loginState.emit(Result.ERROR("Some Fields are empty"))
             return@launch

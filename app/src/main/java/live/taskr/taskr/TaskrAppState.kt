@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import live.taskr.taskr.utils.MainDestinations
 import live.taskr.taskr.utils.models.HomeViewModel
 import live.taskr.taskr.utils.models.LoginViewModel

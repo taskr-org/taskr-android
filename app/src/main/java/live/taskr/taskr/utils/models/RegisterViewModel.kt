@@ -1,5 +1,6 @@
 package live.taskr.taskr.utils.models
 
+import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,14 +13,15 @@ import live.taskr.taskr.utils.repository.TaskrRepo
 import java.util.regex.Pattern
 import javax.inject.Inject
 
-class RegisterViewModel (
+@HiltViewModel
+class RegisterViewModel @Inject constructor (
     private val taskrRepo: TaskrRepo
 ) : ViewModel() {
 
-    private val fullName = MutableStateFlow(TextFieldValue(""))
-    private val userName = MutableStateFlow(TextFieldValue(""))
-    private val email = MutableStateFlow(TextFieldValue(""))
-    private val password = MutableStateFlow(TextFieldValue(""))
+    private val fullName = MutableStateFlow(TextFieldValue("test"))
+    private val userName = MutableStateFlow(TextFieldValue("test"))
+    private val email = MutableStateFlow(TextFieldValue("test@gmail.com"))
+    private val password = MutableStateFlow(TextFieldValue("test"))
 
     private val _registerState = MutableSharedFlow<Result<String>>()
     val registerState: SharedFlow<Result<String>> = _registerState
@@ -41,6 +43,7 @@ class RegisterViewModel (
             _registerState.emit(Result.ERROR("Email is not Valid!"))
             return@launch
         }
+        Log.e("Register:","Did you summon me?")
 
         val newUser = User(
             fullName = FullName.text,
