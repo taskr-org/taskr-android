@@ -18,9 +18,6 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val taskrRepo: TaskrRepo
 ): ViewModel() {
-    private val _loginState = MutableSharedFlow<Result<String>>()
-    val loginState: SharedFlow<Result<String>> = _loginState
-
     private val _currentUserState = MutableSharedFlow<Result<User>>()
     val currentUserState:SharedFlow<Result<User>> = _currentUserState
 

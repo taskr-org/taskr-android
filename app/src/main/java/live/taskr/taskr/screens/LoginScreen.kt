@@ -38,10 +38,10 @@ fun LoginScreen(
     navigateToRegister: () -> Unit,
 ) {
     val viewModel = hiltViewModel<LoginViewModel>()
-    val viewState by viewModel.state.collectAsState()
 
-    var username by remember { mutableStateOf(viewState.userName) }
-    var password by remember { mutableStateOf(viewState.password) }
+
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     IsLoggedIn()
     Surface {
@@ -62,7 +62,7 @@ fun LoginScreen(
                 password = password,
                 onPasswordChange = { password = it },
                 navigateToRegister = navigateToRegister,
-                loginUser = viewModel::loginUser
+                loginUser = { viewModel.loginUser(username, password) }
             )
         }
 
@@ -75,13 +75,12 @@ fun IsLoggedIn(
 ) {
     val viewModel = hiltViewModel<LoginViewModel>()
     val coroutineScope = rememberCoroutineScope()
-    val viewState by viewModel.state.collectAsState()
-    LaunchedEffect(viewState) {
+    LaunchedEffect(viewModel.loginState) {
         coroutineScope.launch {
             viewModel.loginState.collect { result ->
                 when (result) {
                     is Result.SUCCESS -> {
-                        Log.e("Login:","success")
+                        Log.v("Login:","success")
                         appState.navigateToHome()
                     }
                     is Result.ERROR -> {
@@ -100,10 +99,10 @@ fun IsLoggedIn(
 
 @Composable
 fun LoginFields(
-    username: TextFieldValue,
-    onUserNameChange: (TextFieldValue) -> Unit,
-    password: TextFieldValue,
-    onPasswordChange: (TextFieldValue) -> Unit,
+    username: String,
+    onUserNameChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
     navigateToRegister: () -> Unit,
     loginUser: () -> Unit
 ) {

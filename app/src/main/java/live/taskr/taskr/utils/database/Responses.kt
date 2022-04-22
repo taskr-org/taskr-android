@@ -1,6 +1,6 @@
 package live.taskr.taskr.utils.database
 
 data class Responses(
-    val success: Boolean,
+    var status: String,
     val message: String
 )

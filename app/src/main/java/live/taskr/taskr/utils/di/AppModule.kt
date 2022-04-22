@@ -3,6 +3,7 @@ package live.taskr.taskr.utils.di
 import android.content.Context
 import androidx.room.Room
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -82,6 +83,10 @@ object AppModule {
         val client = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .build()
+
+        val gsonClient = GsonBuilder()
+            .setLenient()
+            .create()
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

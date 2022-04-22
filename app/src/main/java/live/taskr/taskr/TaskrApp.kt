@@ -39,7 +39,7 @@ fun TaskrApp(
         }
         composable(MainDestinations.Register.route) {
             RegisterScreen(navigateToLogin = {
-                appState.navigateToLogin()
+                appState.navigateToHome()
             })
         }
         composable(MainDestinations.Home.route) { Home() }

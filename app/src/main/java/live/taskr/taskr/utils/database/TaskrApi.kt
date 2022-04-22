@@ -10,13 +10,13 @@ interface TaskrApi {
      *  Auth
      */
     @Headers("Content-Type: application/json")
-    @POST("/users/register")
+    @POST("/user/register")
     suspend fun registerUser(
         @Body user: User
     ): Responses
 
     @Headers("Content-Type: application/json")
-    @POST("/users/login")
+    @POST("/user/login")
     suspend fun loginUser(
         @Body user: User
     ): Responses

@@ -7,5 +7,4 @@ object Constants {
     const val EMAIL_KEY = "EMAIL_KEY"
 
     const val BASE_URL = "https://api.taskr.live"
-    const val API_VERSION = ""
 }

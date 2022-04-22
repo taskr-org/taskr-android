@@ -13,8 +13,8 @@ import live.taskr.taskr.ui.theme.TaskrTheme
 
 @Composable
 fun TaskrOutlinedTextField(
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
@@ -54,7 +54,7 @@ fun TaskrOutlinedTextField(
 fun PreviewTaskrOutlinedTextField() {
     TaskrTheme {
         TaskrOutlinedTextField(
-            value = TextFieldValue("Email"),
+            value = "",
             onValueChange = {},
             label = {Text("hey")}
         )

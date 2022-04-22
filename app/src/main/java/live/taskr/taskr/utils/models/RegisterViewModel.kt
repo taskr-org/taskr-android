@@ -19,9 +19,9 @@ class RegisterViewModel @Inject constructor (
 ) : ViewModel() {
 
     private val fullName = MutableStateFlow(TextFieldValue("test"))
-    private val userName = MutableStateFlow(TextFieldValue("test"))
+    private val userName = MutableStateFlow(TextFieldValue("test4"))
     private val email = MutableStateFlow(TextFieldValue("test@gmail.com"))
-    private val password = MutableStateFlow(TextFieldValue("test"))
+    private val password = MutableStateFlow(TextFieldValue("12345678"))
 
     private val _registerState = MutableSharedFlow<Result<String>>()
     val registerState: SharedFlow<Result<String>> = _registerState
@@ -46,7 +46,7 @@ class RegisterViewModel @Inject constructor (
         Log.e("Register:","Did you summon me?")
 
         val newUser = User(
-            fullName = FullName.text,
+            fullname = FullName.text,
             username = UserName.text,
             email = Email.text,
             password = Password.text

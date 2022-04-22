@@ -34,10 +34,10 @@ fun RegisterScreen(
     val viewModel = hiltViewModel<RegisterViewModel>()
     val viewState by viewModel.state.collectAsState()
 
-    var fullName by remember { mutableStateOf(viewState.fullName) }
-    var username by remember { mutableStateOf(viewState.userName) }
-    var password by remember { mutableStateOf(viewState.password) }
-    var email by remember { mutableStateOf(viewState.email) }
+    var fullName by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
 
     IsRegisterd()
     Column() {
@@ -66,9 +66,8 @@ fun RegisterScreen(
 
 @Composable
 fun IsRegisterd(
-    appState: TaskrAppState = rememberTaskrAppState()
+    appState: TaskrAppState = rememberTaskrAppState(),
 ) {
-
     val viewModel = hiltViewModel<RegisterViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val viewState by viewModel.state.collectAsState()
@@ -77,18 +76,17 @@ fun IsRegisterd(
             viewModel.registerState.collect { result ->
                 when (result) {
                     is Result.SUCCESS -> {
-                        Log.e("Register:","success")
+                        Log.e("Register:", "success")
                         appState.navigateToHome()
                     }
                     is Result.ERROR -> {
-
-                        Log.e("Register:","ERROR")
+                        Log.e("Register:", "ERROR")
                         // TODO
                     }
                     is Result.LOADING -> {
                         // TODO
 
-                        Log.e("Register:","loading")
+                        Log.e("Register:", "loading")
                     }
                 }
             }
@@ -98,14 +96,14 @@ fun IsRegisterd(
 
 @Composable
 fun RegisterFields(
-    fullName: TextFieldValue,
-    onFullNameChange: (TextFieldValue) -> Unit,
-    email: TextFieldValue,
-    onEmailChange: (TextFieldValue) -> Unit,
-    userName: TextFieldValue,
-    onUserNameChange: (TextFieldValue) -> Unit,
-    password: TextFieldValue,
-    onPasswordChange: (TextFieldValue) -> Unit,
+    fullName: String,
+    onFullNameChange: (String) -> Unit,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    userName: String,
+    onUserNameChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
     navigateToLogin: () -> Unit,
     registerUser: () -> Unit
 ) {
@@ -170,7 +168,7 @@ fun RegisterFields(
                 .padding(bottom = 18.dp)
         )
         OutlinedButton(
-            onClick = { navigateToLogin },
+            onClick = navigateToLogin,
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colors.onBackground
             ),
@@ -235,13 +233,13 @@ fun RegisterFields(
 fun PreviewRegisterFields() {
     TaskrTheme {
         RegisterFields(
-            fullName = TextFieldValue("FullName"),
+            fullName = "",
             onFullNameChange = {},
-            email = TextFieldValue("Email"),
+            email = "",
             onEmailChange = {},
-            userName = TextFieldValue("Username"),
+            userName = "",
             onUserNameChange = {},
-            password = TextFieldValue("Password"),
+            password = "",
             onPasswordChange = {},
             navigateToLogin = {},
             registerUser = {}

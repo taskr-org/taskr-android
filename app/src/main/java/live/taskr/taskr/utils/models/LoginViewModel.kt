@@ -16,58 +16,56 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val taskrRepo: TaskrRepo
 ) : ViewModel() {
-    private val userName = MutableStateFlow(TextFieldValue("test"))
-    private val password = MutableStateFlow(TextFieldValue("test"))
-
     private val _loginState = MutableSharedFlow<Result<String>>()
     val loginState: SharedFlow<Result<String>> = _loginState
 
-    private val _state = MutableStateFlow(LoginViewState())
-    val state: StateFlow<LoginViewState>
-        get() = _state
+    private val _state = MutableSharedFlow<Result<User>>()
+    val state: SharedFlow<Result<User>> = _state
 
-    init {
-        viewModelScope.launch {
-            combine(
-                userName,
-                password
-            ) { userName, password ->
-                LoginViewState(
-                    userName = userName,
-                    password = password
-                )
-            }.catch { throwable ->
-                throw throwable
-            }.collect {
-                _state.value = it
-            }
-        }
-    }
+//    init {
+//        viewModelScope.launch {
+//            combine(
+//                userName,
+//                password
+//            ) { userName, password ->
+//                LoginViewState(
+//                    userName = userName,
+//                    password = password
+//                )
+//            }.catch { throwable ->
+//                throw throwable
+//            }.collect {
+//                _state.value = it
+//            }
+//        }
+//    }
 
 
     fun loginUser(
-        UserName: TextFieldValue = userName.value,
-        Password: TextFieldValue = password.value
-    ) = viewModelScope.launch {
-        _loginState.emit(Result.LOADING())
-        Log.e("Login:","who summoned me?")
-        if (UserName.text.isEmpty() || Password.text.isEmpty()) {
-            _loginState.emit(Result.ERROR("Some Fields are empty"))
-            return@launch
-        }
+        UserName: String,
+        Password: String
+    ){
+        viewModelScope.launch {
+            _loginState.emit(Result.LOADING())
+            Log.e("Login:", "who summoned me?")
+            if (UserName.isEmpty() || Password.isEmpty()) {
+                _loginState.emit(Result.ERROR("Some Fields are empty"))
+                return@launch
+            }
 
-        val newUser = User(
-            username = UserName.text,
-            password = Password.text
-        )
-        _loginState.emit(taskrRepo.loginUser(newUser))
+            val newUser = User(
+                username = UserName,
+                password = Password
+            )
+            _loginState.emit(taskrRepo.loginUser(newUser))
+        }
     }
 }
 
-data class LoginViewState(
-    val userName: TextFieldValue = TextFieldValue(""),
-    val password: TextFieldValue = TextFieldValue(""),
-//    val loginState: SharedFlow<Result<String>>,
-    val refreshing: Boolean = false,
-    val errMessage: String? = null
-)
+//data class LoginViewState(
+//    val userName: TextFieldValue = TextFieldValue(""),
+//    val password: TextFieldValue = TextFieldValue(""),
+////    val loginState: SharedFlow<Result<String>>,
+//    val refreshing: Boolean = false,
+//    val errMessage: String? = null
+//)
